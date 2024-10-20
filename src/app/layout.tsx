@@ -36,20 +36,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased ${
+          !disableNavbar.includes(pathname) ? "flex flex-col min-h-screen" : ""
+        }`}
       >
         {!disableNavbar.includes(pathname) && <Navbar />}
-        {/*
-        <h1>Layout: {state}</h1>
-        <button
-          className="px-6 py-2 bg-blue-800 text-white rounded-sm"
-          onClick={() => {
-            setState(state + 1);
-          }}
-        >
-          Klik
-        </button> */}
-
         {children}
       </body>
     </html>

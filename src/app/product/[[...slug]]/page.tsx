@@ -1,6 +1,8 @@
-import { randomInt } from "crypto";
+// "use client"
+
 import Image from "next/image";
 import Link from "next/link";
+// import { useEffect, useState } from "react";
 import { FaCartShopping, FaFire } from "react-icons/fa6";
 
 type DetailProductPageProps = {
@@ -8,19 +10,37 @@ type DetailProductPageProps = {
 };
 
 async function getData() {
-  const response = await fetch("https://fakestoreapi.com/products");
-  // const response = await fetch("http://localhost:3000/api/product", {
-  //   cache: "no-store",
-  // });
+  // const response = await fetch("https://fakestoreapi.com/products");
+  const response = await fetch("http://localhost:3000/api/product", {
+    cache: "force-cache",
+    // cache: "no-store",
+    next: {
+      tags: ["products"]
+      // revalidate: 30,
+    },
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
-  // console.log(response);
-  return response.json();
+  const data = response.json();
+  return data;
 }
 
 export default async function DetailProductPage(props: DetailProductPageProps) {
   const { params } = props;
+  // const [productsData, setProductsData] = useState([]);
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const products = await getData();
+  //     const data = products?.data ?? products;
+  //     setProductsData(data);
+  //     console.log(data);
+  //   }
+
+  //   fetchData();
+  // }, []);
+
   const products = await getData();
   const productsData = products?.data ?? products;
   return (
@@ -38,10 +58,9 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
               image: string;
               rating: string;
             }) => {
-              const discount = 5 + randomInt(25);
+              const discount = 5 + Math.floor(Math.random() * 25);
               return (
-                <Link
-                  href={`/product/${product.id}`}
+                <div
                   key={product.id}
                   className="border-2 rounded-md duration-500 bg-white hover:z-50 relative hover:scale-110"
                 >
@@ -56,7 +75,7 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
                     ""
                   )}
                   <div className="flex flex-col justify-between h-full">
-                    <div className="px-8 py-4">
+                    <Link href={`/product/${product.id}`} className="px-8 py-4">
                       {product.image && (
                         <Image
                           src={product.image}
@@ -67,8 +86,7 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
                         />
                       )}
                       <p className="text-md font-bold">{product.title}</p>
-                    </div>
-                    {/* <div className="grow"></div> */}
+                    </Link>
                     <div className="border-t-4 bg-slate-100">
                       <div className="px-6 py-4">
                         <div className="flex justify-between items-center">
@@ -96,18 +114,16 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
                           </div>
                           <Link
                             href={`/product/add/${product.id}`}
-                            className="bg-red-600 text-white hover:bg-red-800 rounded-md px-2 py-3"
+                            className="bg-red-600 text-white hover:bg-red-800 rounded-md px-2 py-3 flex items-center gap-2 justify-center"
                           >
-                            <div className="flex items-center gap-2 justify-center">
-                              <FaCartShopping size={18} />
-                              <p className="text-sm">Add to Cart</p>
-                            </div>
+                            <FaCartShopping size={18} />
+                            <p className="text-sm">Add to Cart</p>
                           </Link>
                         </div>
                       </div>
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             }
           )}

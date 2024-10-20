@@ -27,13 +27,20 @@ export async function GET(request: NextRequest) {
       image:
         "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/8f08b820-f450-4a87-b689-c7091cc88a9f/NIKE+FULL+FORCE+LO.png",
     },
+    {
+      id: 4,
+      title: "Nike Metcon 9 AMP",
+      price: 1990000,
+      image:
+        "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/ba8325e8-9aec-4cd0-8f1c-fc071ed5e122/NIKE+METCON+9+AMP.png",
+    },
   ];
   console.log(data.find((data) => data.id === Number(id)));
   // let detailData = undefined;
   if (id) {
     const detailData = data.find((data) => data.id === Number(id));
     if (!detailData) {
-      return NextResponse.json({ status: 404, message: "anjing" });
+      return NextResponse.json({ status: 404, message: "Not Found", data: {} });
     }
     return NextResponse.json({
       status: 200,
