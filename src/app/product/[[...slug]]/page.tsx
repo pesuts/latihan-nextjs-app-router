@@ -10,14 +10,14 @@ type DetailProductPageProps = {
 };
 
 async function getData() {
-  // const response = await fetch("https://fakestoreapi.com/products");
-  const response = await fetch("http://localhost:3000/api/product", {
-    cache: "force-cache",
-    // cache: "no-store",
-    next: {
-      tags: ["products"]
-      // revalidate: 30,
-    },
+  const response = await fetch("https://fakestoreapi.com/products", {
+  // const response = await fetch("http://localhost:3000/api/product", {
+  //   // cache: "force-cache",
+    cache: "no-store",
+  //   next: {
+  //     tags: ["products"]
+  //     // revalidate: 30,
+  //   },
   });
   if (!response.ok) {
     throw new Error("Failed to fetch data");
