@@ -10,8 +10,8 @@ export default function AdminProductPage() {
     alert(response.message);
   };
   return (
-    <div className="flex-1 overflow-auto flex justify-center items-center">
-      <div className="relative group">
+    <div className="flex-1 flex justify-center items-center bg-gray-300 rounded-md">
+      <div className="relative group z-10">
         <button
           className="bg-blue-300 hover:bg-blue-400 p-3 rounded-md font-bold shadow-2xl"
           type="submit"

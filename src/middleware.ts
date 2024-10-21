@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   // console.log(request.url);
   // console.log("cuki");
-  const isLogin = false;
+  const isLogin = true;
 
   // if (request.nextUrl.pathname.startsWith("/about")) {
   if (!isLogin) {
