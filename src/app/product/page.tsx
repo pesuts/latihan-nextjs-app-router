@@ -1,5 +1,6 @@
 // "use client"
 
+import { getData } from "@/services/products";
 import Image from "next/image";
 import Link from "next/link";
 // import { useEffect, useState } from "react";
@@ -9,22 +10,22 @@ type DetailProductPageProps = {
   params: { slug: string };
 };
 
-async function getData() {
-  const response = await fetch("https://fakestoreapi.com/products", {
-  // const response = await fetch("http://localhost:3000/api/product", {
-  //   // cache: "force-cache",
-    cache: "no-store",
-  //   next: {
-  //     tags: ["products"]
-  //     // revalidate: 30,
-  //   },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  const data = response.json();
-  return data;
-}
+// async function getData() {
+//   const response = await fetch("https://fakestoreapi.com/products", {
+//   // const response = await fetch("http://localhost:3000/api/product", {
+//   //   // cache: "force-cache",
+//     cache: "no-store",
+//   //   next: {
+//   //     tags: ["products"]
+//   //     // revalidate: 30,
+//   //   },
+//   });
+//   if (!response.ok) {
+//     throw new Error("Failed to fetch data");
+//   }
+//   const data = response.json();
+//   return data;
+// }
 
 export default async function DetailProductPage(props: DetailProductPageProps) {
   const { params } = props;
@@ -40,8 +41,9 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
 
   //   fetchData();
   // }, []);
-
-  const products = await getData();
+  // const url = "https://fakestoreapi.com/products";
+  const url = "http://localhost:3000/api/product";
+  const products = await getData(url);
   const productsData = products?.data ?? products;
   return (
     <div>
@@ -75,7 +77,7 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
                     ""
                   )}
                   <div className="flex flex-col justify-between h-full">
-                    <Link href={`/product/${product.id}`} className="px-8 py-4">
+                    <Link href={`/product/detail/${product.id}`} className="px-8 py-4">
                       {product.image && (
                         <Image
                           src={product.image}
