@@ -7,6 +7,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./navbar";
 import { usePathname } from "next/navigation";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +33,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  // const [state, setState] = useState(0);
   return (
     <html lang="en">
       <body
@@ -40,8 +40,10 @@ export default function RootLayout({
           !disableNavbar.includes(pathname) ? "flex flex-col min-h-screen" : ""
         }`}
       >
-        {!disableNavbar.includes(pathname) && <Navbar />}
-        {children}
+        <SessionProvider>
+          {!disableNavbar.includes(pathname) && <Navbar />}
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );

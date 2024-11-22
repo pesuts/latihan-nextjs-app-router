@@ -1,21 +1,40 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleLogin = (event: any) => { 
+  const router  = useRouter();
+
+  const handleLogin = async (event: any) => {
     event.preventDefault();
     const data = {
       email: event.currentTarget.email.value,
       password: event.currentTarget.password.value,
+    };
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+        callbackUrl: "/dashboard",
+      });
+      if (!res?.error) {
+        router.push("/dashboard");
+      } else { 
+        console.log(res.error);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    console.log(data)
+    console.log(data);
     fetch("api/auth/login", {
       method: "POST",
-      body: JSON.stringify(data)
-    })
-  }
+      body: JSON.stringify(data),
+    });
+  };
 
   return (
     <div className="max-w-xl mx-auto h-screen flex items-center">

@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import {
+  usePathname,
+  // useRouter
+} from "next/navigation";
 
 const getTextStyle = (pathname: string, route: string) => {
   const activeText = "text-white hover:text-blue-300";
@@ -14,11 +19,15 @@ const getTextStyle = (pathname: string, route: string) => {
 export default function Navbar() {
   const pathName = usePathname();
   console.log(pathName);
-  const router = useRouter();
+
+  const { status }: { data: any; status: string } = useSession();
+  // const router = useRouter();
 
   return (
     <nav className="flex bg-gray-800 py-3 items-center justify-between px-16">
-      <Link href="/" className=" text-white font-bold text-2xl">Navbar</Link>
+      <Link href="/" className=" text-white font-bold text-2xl">
+        Navbar
+      </Link>
       <ul className="flex gap-8 font-semibold">
         <Link href={"/"} className={getTextStyle(pathName, "/")}>
           Home
@@ -33,10 +42,17 @@ export default function Navbar() {
           Profile
         </Link>
       </ul>
-      <button onClick={() => {
-        router.push("/login");
-      }} className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200">
-        Log In
+      <button
+        onClick={() => {
+          if (status === "unauthenticated") {
+            signIn();
+          } else signOut();
+          // (status === "unauthenticated") ? signIn() : signOut();
+          // router.push("/login");
+        }}
+        className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
+      >
+        {status === "unauthenticated" ? "Log In" : "Log Out"}
       </button>
     </nav>
   );
