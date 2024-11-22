@@ -2,7 +2,7 @@ export default function Loading() {
   return (
     <div>
       <div className="grid grid-cols-4 gap-8 m-5">
-        {Array.from({ length: 12 }).map((_, index) => (
+        {Array.from({ length: 8 }).map((_, index) => (
           <div
             className="border-2 rounded-md duration-500 hover:z-50 hover:scale-110"
             key={index}

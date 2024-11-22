@@ -43,7 +43,9 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
   // }, []);
   // const url = "https://fakestoreapi.com/products";
   const url = "http://localhost:3000/api/product";
+  console.log("wadidaw")
   const products = await getData(url);
+  console.log(products)
   const productsData = products?.data ?? products;
   return (
     <div>
@@ -53,7 +55,8 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
           {productsData.map(
             (product: {
               id: number;
-              title: string;
+              title?: string;
+              name?: string;
               price: number;
               description: string;
               category: string;
@@ -87,7 +90,7 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
                           height={300}
                         />
                       )}
-                      <p className="text-md font-bold">{product.title}</p>
+                      <p className="text-md font-bold">{product.title ?? product.name}</p>
                     </Link>
                     <div className="border-t-4 bg-slate-100">
                       <div className="px-6 py-4">
