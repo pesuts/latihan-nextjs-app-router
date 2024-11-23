@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
-export default function LoginPage() {
+export default function LoginPage({searchParams}: any) {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const [isMessageVisible, setIsMessageVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
+
+  const callbackUrl = searchParams.callbackUrl || "/";
 
   useEffect(() => { 
     if (isPasswordShow) { 
@@ -41,12 +43,11 @@ export default function LoginPage() {
         redirect: false,
         email: data.email,
         password: data.password,
-        callbackUrl: "/dashboard",
+        callbackUrl,
       });
       if (!res?.error) {
-        console.log("wew");
         setIsLoading(false);
-        router.push("/dashboard");
+        router.push(callbackUrl);
       } else {
         setIsLoading(false);
         setIsMessageVisible(true);
