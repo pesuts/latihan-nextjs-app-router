@@ -144,6 +144,19 @@ export default function RegisterPage() {
           >
             {isLoading ? "Loading..." : "Create Account"}
           </button>
+          <button
+            type="button"
+            onClick={() =>
+              signIn("google", {
+                callbackUrl: "/",
+                redirect: false,
+              })
+            }
+            disabled={isLoading}
+            className="w-full text-blue-700 outline outline-blue-700 outline-1 bg-white hover:bg-blue-200 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-white dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-black/60"
+          >
+            Login With Google
+          </button>
           <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             Already registered?{" "}
             <Link

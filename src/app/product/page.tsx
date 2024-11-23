@@ -43,9 +43,7 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
   // }, []);
   // const url = "https://fakestoreapi.com/products";
   const url = "http://localhost:3000/api/product";
-  console.log("wadidaw")
   const products = await getData(url);
-  console.log(products)
   const productsData = products?.data ?? products;
   return (
     <div>

@@ -6,6 +6,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import app from "./init";
@@ -88,7 +89,7 @@ export async function login(data: { email: string }) {
 
   if (users) {
     return users[0];
-  } else { 
+  } else {
     return null;
     // return {
     //   status: false,
@@ -96,4 +97,32 @@ export async function login(data: { email: string }) {
     //   message: "Email not registered",
     // };
   }
+}
+
+export async function loginWithGoogle(data: any, callback: any) {
+  const q = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
+  const snapshot = await getDocs(q);
+  const user = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  if (user.length > 0) {
+    data.role = data[0].role
+    await updateDoc(doc(firestore, "users", user[0].id), data).then(() => {
+      // return data;
+      callback({ status: true, data });
+    });
+  } else { 
+    data.role = "member";
+    await addDoc(collection(firestore, "users"), data).then(() => { 
+      callback({ status: true, data });
+      // return data;
+    })
+  }
+
+
 }

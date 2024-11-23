@@ -21,11 +21,9 @@ const getTextStyle = (pathname: string, route: string) => {
 
 export default function Navbar() {
   const pathName = usePathname();
-  console.log(pathName);
   const [showLogout, setShowLogout] = useState<boolean>(false);
 
   const { data: session, status }: { data: any; status: string } = useSession();
-  console.log(session);
   // console.log(session?.user);
   // const router = useRouter();
 

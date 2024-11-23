@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { login } from "@/lib/firebase/service";
+import { login, loginWithGoogle } from "@/lib/firebase/service";
 import { compare } from "bcrypt";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -28,18 +29,20 @@ const authOptions: NextAuthOptions = {
           email: string;
           password: string;
         };
-        const user: any = await login({email});
+        const user: any = await login({ email });
         if (user) {
           const passwordConfirm = await compare(password, user.password);
-          console.log("weaaa")
-          if (passwordConfirm) { 
-            console.log("wea")
+          if (passwordConfirm) {
             return user;
           }
         } else {
           return null;
         }
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_OAUTH_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET || "",
     }),
   ],
   callbacks: {
@@ -48,6 +51,23 @@ const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.fullname = user.fullname;
         token.role = user.role;
+      } else if (account?.provider === "google") {
+        const data = {
+          fullname: user.name,
+          email: user.email,
+          type: "google",
+        };
+
+        await loginWithGoogle(
+          data,
+          (result: { status: boolean; data: any }) => {
+            if (result.status) {
+              token.email = result.data.email;
+              token.fullname = result.data.fullname;
+              token.role = result.data.role;
+            }
+          }
+        );
       }
       return token;
     },
@@ -65,8 +85,8 @@ const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/login"
-  }
+    signIn: "/login",
+  },
 };
 
 const handler = NextAuth(authOptions);
