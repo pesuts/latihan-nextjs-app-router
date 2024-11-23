@@ -4,20 +4,30 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [isMessageVisible, setIsMessageVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
 
-  useEffect(() => { 
-    const timer = setTimeout(() => { 
-      setIsVisible(false)
-    }, 5000)
+  useEffect(() => {
+    if (isPasswordShow) {
+      setTimeout(() => {
+        setIsPasswordShow(false);
+      }, 5000);
+    }
+  }, [isPasswordShow]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  useEffect(() => {
+    if (isMessageVisible) {
+      setTimeout(() => {
+        setIsMessageVisible(false);
+      }, 10000);
+    }
+  }, [isMessageVisible]);
 
   const handleSubmit = async (event: any) => {
     setIsLoading(true);
@@ -33,8 +43,15 @@ export default function RegisterPage() {
     });
     if (res.status === 200) {
       setIsLoading(false);
+      await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+        // callbackUrl: "/dashboard",
+      });
       router.push("/dashboard");
     } else {
+      setIsMessageVisible(true);
       setMessage("Email already in use!");
       setIsLoading(false);
     }
@@ -50,9 +67,17 @@ export default function RegisterPage() {
           {message && (
             <div
               className={`py-2 text-center bg-red-500 text-white rounded-md 
-            ease-in duration-500 ${isVisible ? "" : "hidden"}`}
+            ease-in duration-500 relative ${isMessageVisible ? "" : "hidden"}`}
             >
               {message}
+              <button
+                onClick={() => {
+                  setIsMessageVisible(false);
+                }}
+                className="absolute top-0 right-0 hover:text-red-800 rounded-full p-[2px] px-[10px] cursor-pointer"
+              >
+                x
+              </button>
             </div>
           )}
           <div>
@@ -94,14 +119,22 @@ export default function RegisterPage() {
             >
               Your password
             </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              required
-            />
+            <div className="relative">
+              <input
+                type={isPasswordShow ? "text" : "password"}
+                name="password"
+                id="password"
+                placeholder="••••••••"
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                required
+              />
+              <span
+                className="absolute top-3.5 right-4 cursor-pointer"
+                onClick={() => setIsPasswordShow(!isPasswordShow)}
+              >
+                {isPasswordShow ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
           </div>
           <button
             type="submit"
@@ -109,7 +142,7 @@ export default function RegisterPage() {
             className={`w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled
             disabled:bg-black/60`}
           >
-            { isLoading ? "Loading..." : "Create Account"}
+            {isLoading ? "Loading..." : "Create Account"}
           </button>
           <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             Already registered?{" "}

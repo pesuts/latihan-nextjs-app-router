@@ -37,7 +37,7 @@ export async function register(
     role?: string;
   }
   // callback: (result: { status: boolean; message: string }) => void
-): Promise<{ status: boolean; statusCode: number, message: string }> {
+): Promise<{ status: boolean; statusCode: number; message: string }> {
   const q = query(
     collection(firestore, "users"),
     where("email", "==", data.email)
@@ -52,7 +52,7 @@ export async function register(
     return {
       status: false,
       statusCode: 400,
-      message: "Email already exist"
+      message: "Email already exist",
     };
   } else {
     data.role = "member";
@@ -63,7 +63,7 @@ export async function register(
       return {
         status: true,
         statusCode: 200,
-        message: "Registrasi sukses"
+        message: "Registrasi sukses",
       };
     } catch (error) {
       return {
@@ -72,6 +72,28 @@ export async function register(
         message: "Registrasi gagal! " + error,
       };
     }
-    // return { status: false, message: "Unexpected error" };
+  }
+}
+
+export async function login(data: { email: string }) {
+  const q = query(
+    collection(firestore, "users"),
+    where("email", "==", data.email)
+  );
+  const snapshot = await getDocs(q);
+  const users = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  if (users) {
+    return users[0];
+  } else { 
+    return null;
+    // return {
+    //   status: false,
+    //   statusCode: 400,
+    //   message: "Email not registered",
+    // };
   }
 }
