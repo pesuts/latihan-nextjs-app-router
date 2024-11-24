@@ -1,7 +1,7 @@
 export default function AboutPage() {
   return (
     <div>
-      <h1>About Page e</h1>
+      <h1 data-testid="title">About Page</h1>
     </div>
   );
 }

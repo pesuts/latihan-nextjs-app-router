@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import useDropdown from "@/hooks/useDropdown";
@@ -7,10 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   usePathname,
-  // useRouter
 } from "next/navigation";
-// import { FaArrowAltCircleDown, FaUserCircle } from "react-icons/fa";
-// import { FaArrowDown } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
 
@@ -42,12 +38,20 @@ export default function Navbar() {
         <Link href={"/about"} className={getTextStyle(pathName, "/about")}>
           About
         </Link>
-        <Link
-          href={"/about/profile"}
-          className={getTextStyle(pathName, "/about/profile")}
-        >
+        <Link href={"/profile"} className={getTextStyle(pathName, "/profile")}>
           Profile
         </Link>
+        <Link href={"/product"} className={getTextStyle(pathName, "/product")}>
+          Products
+        </Link>
+        {session?.user?.role === "admin" && (
+          <Link
+            href={"/dashboard"}
+            className={getTextStyle(pathName, "/dashboard")}
+          >
+            Dashboard
+          </Link>
+        )}
       </ul>
       <div className="relative w-20 h-10">
         <div className="absolute">
@@ -66,13 +70,8 @@ export default function Navbar() {
                 {session?.user?.fullname}
               </p>
               <div ref={ref}>
-                <button
-                  className="relative"
-                  onClick={toggleDropdown}
-                >
-                  <div
-                    className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
-                  >
+                <button className="relative" onClick={toggleDropdown}>
+                  <div className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200">
                     <div className="flex items-center gap-2">
                       {/* <FaUserCircle /> */}
                       <Image
@@ -86,7 +85,7 @@ export default function Navbar() {
                     </div>
                   </div>
                   {isOpen && (
-                  // {showLogout && (
+                    // {showLogout && (
                     <div
                       className="absolute text-center px-4 py-2 right-0 bg-white text-blue-950 rounded-md hover:bg-blue-200 outline-blue-950 outline-2 outline"
                       onClick={(e) => {
@@ -103,8 +102,6 @@ export default function Navbar() {
                 </button>
               </div>
             </div>
-
-            // </div>
           )}
         </div>
       </div>
