@@ -2,11 +2,17 @@ import { getData } from "@/services/products";
 import Image from "next/image";
 
 import { GetServerSidePropsContext } from "next";
-import Modal from "@/components/core/Modal";
 
-export default async function detailProductPage(props: GetServerSidePropsContext) { 
+import dynamic from "next/dynamic";
+
+// import Modal from "@/components/core/Modal";
+const Modal = dynamic(() => import("@/components/core/Modal"));
+
+export default async function detailProductPage(
+  props: GetServerSidePropsContext
+) {
   const { params } = props;
-  const url = `http://localhost:3000/api/product?id=${params?.id}`
+  const url = `http://localhost:3000/api/product?id=${params?.id}`;
   const { data } = await getData(url);
 
   return (

@@ -2,13 +2,16 @@
 "use client";
 
 import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   usePathname,
   // useRouter
 } from "next/navigation";
 import { useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
+// import { FaArrowAltCircleDown, FaUserCircle } from "react-icons/fa";
+// import { FaArrowDown } from "react-icons/fa6";
+import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
 
 const getTextStyle = (pathname: string, route: string) => {
@@ -46,45 +49,62 @@ export default function Navbar() {
           Profile
         </Link>
       </ul>
-      <button>
+      <div>
         {status === "unauthenticated" ? (
-          <div
+          <button
             onClick={() => {
               signIn();
             }}
             className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
           >
             Log In
-          </div>
+          </button>
         ) : (
-          <div className="relative">
-            <div
-              className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
-              onClick={() => setShowLogout(!showLogout)}
-            >
-              <div className="flex items-center gap-2">
-                <FaUserCircle />
-                {session?.user?.fullname}
-              </div>
-            </div>
-            {showLogout && (
+          <div className="flex items-center gap-3">
+            <p className="text-white font-semibold">
+              {session?.user?.fullname}
+            </p>
+              <button
+                className="relative" onClick={() => setShowLogout(false)}>
               <div
-                className="absolute w-full text-center px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200 outline-blue-950 outline-2 outline"
-                onClick={() => {
-                  signOut();
+                className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowLogout(!showLogout);
                 }}
               >
                 <div className="flex items-center gap-2">
-                  <MdOutlineLogout  />
-                  Logout
+                  {/* <FaUserCircle /> */}
+                  <Image
+                    width={25}
+                    height={25}
+                    src={"/images/profile.png"}
+                    alt="profile"
+                  />
+                  <IoIosArrowDown />
+                  {/* {session?.user?.fullname} */}
                 </div>
               </div>
-            )}
+              {showLogout && (
+                <div
+                  className="absolute text-center px-4 py-2 right-0 bg-white text-blue-950 rounded-md hover:bg-blue-200 outline-blue-950 outline-2 outline"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    signOut();
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <MdOutlineLogout />
+                    Logout
+                  </div>
+                </div>
+              )}
+            </button>
           </div>
 
           // </div>
         )}
-      </button>
+      </div>
     </nav>
   );
 }
