@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
 
-export default function LoginPage({searchParams}: any) {
+export default function LoginPage({ searchParams }: any) {
   const router = useRouter();
   const [message, setMessage] = useState<string | null>(null);
   const [isMessageVisible, setIsMessageVisible] = useState<boolean>(false);
@@ -15,21 +16,21 @@ export default function LoginPage({searchParams}: any) {
 
   const callbackUrl = searchParams.callbackUrl || "/";
 
-  useEffect(() => { 
-    if (isPasswordShow) { 
-      setTimeout(() => { 
-        setIsPasswordShow(false)
-      }, 5000)
+  useEffect(() => {
+    if (isPasswordShow) {
+      setTimeout(() => {
+        setIsPasswordShow(false);
+      }, 5000);
     }
-  }, [isPasswordShow])
+  }, [isPasswordShow]);
 
-  useEffect(() => { 
-    if (isMessageVisible) { 
-      setTimeout(() => { 
-        setIsMessageVisible(false)
-      }, 10000)
+  useEffect(() => {
+    if (isMessageVisible) {
+      setTimeout(() => {
+        setIsMessageVisible(false);
+      }, 10000);
     }
-  }, [isMessageVisible])
+  }, [isMessageVisible]);
 
   const handleLogin = async (event: any) => {
     setIsLoading(true);
@@ -54,7 +55,7 @@ export default function LoginPage({searchParams}: any) {
         setMessage("Login failed!");
       }
     } catch (error) {
-      setMessage("Login failed!");
+      setMessage("Login failed!" + error);
       // setMessage(error);
       // console.log(error);
     }
@@ -121,9 +122,11 @@ export default function LoginPage({searchParams}: any) {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 required
               />
-              <span className="absolute top-3.5 right-4 cursor-pointer"
-              onClick={() => setIsPasswordShow(!isPasswordShow)}>
-                {isPasswordShow ? <FaEyeSlash /> : <FaEye />} 
+              <span
+                className="absolute top-3.5 right-4 cursor-pointer"
+                onClick={() => setIsPasswordShow(!isPasswordShow)}
+              >
+                {isPasswordShow ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
           </div>
@@ -164,13 +167,19 @@ export default function LoginPage({searchParams}: any) {
           </button>
           <button
             type="button"
-            onClick={() => signIn("google", {
-              callbackUrl, redirect: false, 
-            })}
+            onClick={() =>
+              signIn("google", {
+                callbackUrl,
+                redirect: false,
+              })
+            }
             disabled={isLoading}
             className="w-full text-blue-700 outline outline-blue-700 outline-1 bg-white hover:bg-blue-200 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-white dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Login With Google
+            <div className="flex items-center justify-center gap-2">
+              <FcGoogle size={20}/>
+              <p>Login With Google</p>
+            </div>
           </button>
           <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             Not registered?{" "}

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import useDropdown from "@/hooks/useDropdown";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +9,6 @@ import {
   usePathname,
   // useRouter
 } from "next/navigation";
-import { useState } from "react";
 // import { FaArrowAltCircleDown, FaUserCircle } from "react-icons/fa";
 // import { FaArrowDown } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
@@ -24,7 +24,7 @@ const getTextStyle = (pathname: string, route: string) => {
 
 export default function Navbar() {
   const pathName = usePathname();
-  const [showLogout, setShowLogout] = useState<boolean>(false);
+  const { isOpen, toggleDropdown, ref } = useDropdown();
 
   const { data: session, status }: { data: any; status: string } = useSession();
   // console.log(session?.user);
@@ -49,61 +49,64 @@ export default function Navbar() {
           Profile
         </Link>
       </ul>
-      <div>
-        {status === "unauthenticated" ? (
-          <button
-            onClick={() => {
-              signIn();
-            }}
-            className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
-          >
-            Log In
-          </button>
-        ) : (
-          <div className="flex items-center gap-3">
-            <p className="text-white font-semibold">
-              {session?.user?.fullname}
-            </p>
-              <button
-                className="relative" onClick={() => setShowLogout(false)}>
-              <div
-                className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowLogout(!showLogout);
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  {/* <FaUserCircle /> */}
-                  <Image
-                    width={25}
-                    height={25}
-                    src={"/images/profile.png"}
-                    alt="profile"
-                  />
-                  <IoIosArrowDown />
-                  {/* {session?.user?.fullname} */}
-                </div>
-              </div>
-              {showLogout && (
-                <div
-                  className="absolute text-center px-4 py-2 right-0 bg-white text-blue-950 rounded-md hover:bg-blue-200 outline-blue-950 outline-2 outline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    signOut();
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <MdOutlineLogout />
-                    Logout
-                  </div>
-                </div>
-              )}
+      <div className="relative w-20 h-10">
+        <div className="absolute">
+          {status === "unauthenticated" ? (
+            <button
+              onClick={() => {
+                signIn();
+              }}
+              className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
+            >
+              Log In
             </button>
-          </div>
+          ) : (
+            <div className="flex items-center gap-3 relative">
+              <p className="text-white font-semibold absolute right-20 w-40 text-right">
+                {session?.user?.fullname}
+              </p>
+              <div ref={ref}>
+                <button
+                  className="relative"
+                  onClick={toggleDropdown}
+                >
+                  <div
+                    className="font-semibold px-3 py-1 bg-white text-blue-950 rounded-md hover:bg-blue-200"
+                  >
+                    <div className="flex items-center gap-2">
+                      {/* <FaUserCircle /> */}
+                      <Image
+                        width={25}
+                        height={25}
+                        src={"/images/profile.png"}
+                        alt="profile"
+                      />
+                      <IoIosArrowDown />
+                      {/* {session?.user?.fullname} */}
+                    </div>
+                  </div>
+                  {isOpen && (
+                  // {showLogout && (
+                    <div
+                      className="absolute text-center px-4 py-2 right-0 bg-white text-blue-950 rounded-md hover:bg-blue-200 outline-blue-950 outline-2 outline"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        signOut();
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <MdOutlineLogout />
+                        Logout
+                      </div>
+                    </div>
+                  )}
+                </button>
+              </div>
+            </div>
 
-          // </div>
-        )}
+            // </div>
+          )}
+        </div>
       </div>
     </nav>
   );

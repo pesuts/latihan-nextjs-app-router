@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -144,6 +145,14 @@ export default function RegisterPage() {
           >
             {isLoading ? "Loading..." : "Create Account"}
           </button>
+          <div className="my-0 py-0 relative border border-1">
+            {/* <hr /> */}
+            <div className="absolute -top-3 w-full flex justify-center">
+              <span className="px-2 bg-white inline-block text-slate-500">
+                or
+              </span>
+            </div>
+          </div>
           <button
             type="button"
             onClick={() =>
@@ -155,7 +164,10 @@ export default function RegisterPage() {
             disabled={isLoading}
             className="w-full text-blue-700 outline outline-blue-700 outline-1 bg-white hover:bg-blue-200 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-white dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Login With Google
+            <div className="flex items-center justify-center gap-2">
+              <FcGoogle size={20}/>
+              <p>Login With Google</p>
+            </div>
           </button>
           <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             Already registered?{" "}
