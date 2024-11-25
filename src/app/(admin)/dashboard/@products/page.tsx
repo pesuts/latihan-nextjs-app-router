@@ -2,7 +2,7 @@
 
 export default function AdminProductPage() {
   const revalidate = async () => {
-    const res = await fetch(`http://localhost:3000/api/revalidate?tag=products&secret=12345678`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/revalidate?tag=products&secret=12345678`, {
       method: "POST",
     });
 

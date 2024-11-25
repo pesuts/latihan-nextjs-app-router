@@ -12,7 +12,7 @@ type DetailProductPageProps = {
 
 // async function getData() {
 //   const response = await fetch("https://fakestoreapi.com/products", {
-//   // const response = await fetch("http://localhost:3000/api/product", {
+//   // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product`, {
 //   //   // cache: "force-cache",
 //     cache: "no-store",
 //   //   next: {
@@ -42,7 +42,7 @@ export default async function DetailProductPage(props: DetailProductPageProps) {
   //   fetchData();
   // }, []);
   // const url = "https://fakestoreapi.com/products";
-  const url = "http://localhost:3000/api/product";
+  const url = process.env.NEXT_PUBLIC_API_URL + "/api/product";
   const products = await getData(url);
   const productsData = products?.data ?? products;
   return (

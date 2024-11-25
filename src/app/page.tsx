@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Home - NEXTJS APP ROUTER",
   description: "Aplikasi latihan nextjs app router",
-  authors: [{ name: "Daniel Sinaga", url: "http://localhost:3000" }],
+  authors: [{ name: "Daniel Sinaga", url: process.env.NEXT_PUBLIC_API_URL }],
   icons: {
     icon: '/favicon2.ico'
   },

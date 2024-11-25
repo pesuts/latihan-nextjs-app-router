@@ -12,7 +12,7 @@ export default async function detailProductPage(
   props: GetServerSidePropsContext
 ) {
   const { params } = props;
-  const url = `http://localhost:3000/api/product?id=${params?.id}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/product?id=${params?.id}`;
   const { data } = await getData(url);
 
   return (

@@ -1,6 +1,6 @@
 export const getData = async (url: string) => {
   const response = await fetch(url, {
-  // const response = await fetch("http://localhost:3000/api/product", {
+  // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product`, {
   //   // cache: "force-cache",
     cache: "no-store",
   //   next: {
